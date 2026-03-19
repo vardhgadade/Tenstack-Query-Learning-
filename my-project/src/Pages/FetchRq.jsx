@@ -6,6 +6,18 @@ import { useState, useEffect } from "react";
 export const FetchRq = () => {
     const [pageNo, setPageNo] = useState(1);
     const queryClient = useQueryClient();
+
+    //  const { data,isPending,error}= useQuery({
+    //     queryKey:["Posts"],   //It worrks as USe states
+    //     queryFn:FetchPhotos,
+    //    // gcTime:1000 //Garbage Time It is used to manage Cache
+    //    //staleTime:10000, //This Decides for how much long durating our Data is Fresh  and if youre settled x time and and let it you visited this page first at that time 
+    //    //API Hitting is done for first time and again you visit that page again before the x time expires at that time it dont make any new request untill x time is over 
+    //    //Let it you visit the page and youre on that same page and x time expires and then you left that page at that time the data goes to inactive stage
+    //    refetchInterval:1000,
+    //    refetchIntervalInBackground:true,
+    // })
+
     
     const itemsPerChunk = 30;  // Fetch 30 items per API call
     const itemsPerPage = 5;    // Display 5 items per page
