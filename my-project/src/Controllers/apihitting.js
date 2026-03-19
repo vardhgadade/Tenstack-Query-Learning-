@@ -6,11 +6,15 @@ const api= axios.create({
 })
 
 
-export const FetchPhotos=async()=>{
-    const response= await api.get("/photos")
-
-    return response.data
-}
+export const FetchPhotos = async (pageNo, limit = 30) => {
+    try {
+        const response = await api.get(`/photos?_page=${pageNo}&_limit=${limit}`);
+        return response.data;
+    } catch (err) {
+        console.log("Error in API Hitting");
+        throw err;
+    }
+};
 
 export const IndividualtPage= async(id)=>{
     try{
@@ -23,3 +27,4 @@ export const IndividualtPage= async(id)=>{
         throw err
     }
 }
+
