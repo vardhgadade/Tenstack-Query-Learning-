@@ -2,10 +2,24 @@ import { FetchPhotos } from "../Controllers/apihitting";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { DeletefromAPI } from "../Controllers/apihitting";
 
 export const FetchRq = () => {
     const [pageNo, setPageNo] = useState(1);
     const queryClient = useQueryClient();
+
+
+    const deletePost=useMutation({
+        mutationFn:(id)=>DeletefromAPI(id),
+        onSuccess: (data, variables) => {
+            // Remove the deleted item from all cached chunks
+            queryClient.setQueriesData(["Posts"], (oldData) => {
+                if (!oldData || !Array.isArray(oldData)) return oldData;
+                return oldData.filter(item => item.id !== variables);
+            });
+        }
+    })
 
     //  const { data,isPending,error}= useQuery({
     //     queryKey:["Posts"],   //It worrks as USe states
@@ -16,6 +30,7 @@ export const FetchRq = () => {
     //    //Let it you visit the page and youre on that same page and x time expires and then you left that page at that time the data goes to inactive stage
     //    refetchInterval:1000,
     //    refetchIntervalInBackground:true,
+    //    keeppreviousdata:true //This keeps previous data untill data load it never get us to next to or previous it is used for avoiding Loading stata
     // })
 
     
@@ -101,6 +116,12 @@ export const FetchRq = () => {
                                 <p className="text-gray-600 text-sm">
                                     {posts.body}
                                 </p>
+                              <button onClick={(e)=>{
+                                e.preventDefault();
+                                deletePost.mutate(posts.id);
+
+                              }}
+                              className="mt-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" >Delete!</button>
                             </div>
                         </NavLink>
                     ))}

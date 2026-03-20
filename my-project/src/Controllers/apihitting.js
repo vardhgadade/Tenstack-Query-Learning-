@@ -28,3 +28,13 @@ export const IndividualtPage= async(id)=>{
     }
 }
 
+
+export const DeletefromAPI=async(id)=>{
+    try{
+
+       return await api.delete(`/photos/${id}`)
+    }catch(err){
+       console.log("Error in DElete API HItting")
+
+    }
+}
