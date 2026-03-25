@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { DeletefromAPI } from "../Controllers/apihitting";
+import { DeletefromAPI,UpdateTheData  } from "../Controllers/apihitting";
 
 export const FetchRq = () => {
     const [pageNo, setPageNo] = useState(1);
@@ -18,6 +18,17 @@ export const FetchRq = () => {
                 if (!oldData || !Array.isArray(oldData)) return oldData;
                 return oldData.filter(item => item.id !== variables);
             });
+        }
+    })
+
+    const updatePost=useMutation({
+        mutationFn:(id)=>UpdateTheData(id),
+        onSuccess:(apiData,postId)=>{
+            queryClient.setQueryData(['Posts',currentChunk],(postsData)=>{
+                return postsData?.map((curPost)=>{
+                    return curPost.id=== postId?{...curPost,title: apiData.data.title}:curPost;
+                })
+            })
         }
     })
 
@@ -122,7 +133,15 @@ export const FetchRq = () => {
 
                               }}
                               className="mt-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" >Delete!</button>
+                              <button onClick={(e)=>{
+                                e.preventDefault();
+                                e.stopPropagation()
+                                updatePost.mutate(posts.id);
+
+                              }}
+                              className="mt-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" >Update!</button>
                             </div>
+                            
                         </NavLink>
                     ))}
                 </div>

@@ -38,3 +38,27 @@ export const DeletefromAPI=async(id)=>{
 
     }
 }
+
+export const UpdateTheData=async(id)=>{
+    try{
+       
+        return await api.patch(`/photos/${id}`,{title:"I have Updated The Post"})
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+
+export const GITAPIHITTING = async ({ pageParam = 1 }) => {
+    try {
+        const res = await axios.get(
+            `https://api.github.com/users?per_page=10&page=${pageParam}`
+        );
+
+        return res.data;
+    } catch (err) {
+        console.log("Error fetching GitHub users", err);
+        throw err;
+    }
+};
